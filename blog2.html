@@ -75,48 +75,50 @@
             </li>
             <li>
                 <strong>Define the Library</strong>: In the newly created file, define the class and include some methods. Here’s an example:
-                <pre><code class="language-php">
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class MyLibrary {
-    public function greet($name) {
-        return "Hello, " . $name . "!";
-    }
-    public function double($number) {
-        return $number * 2;
-    }
-}
+                <pre><code>
+                    &lt;?php
+                    defined('BASEPATH') OR exit('No direct script access allowed');
+                    
+                    class MyLibrary {
+                        public function greet($name) {
+                            return "Hello, " . $name . "!";
+                        }
+                        public function double($number) {
+                            return $number * 2;
+                        }
+                    }
+                    ?&gt;
                 </code></pre>
-            </li>
-        </ol>
+                    
+                    <h3>Step 2: Load the Custom Library</h3>
+                    <p>You can load your custom library in a controller. Here’s how you can do that:</p>
+                    
+                    <pre><code>
+                    &lt;?php
+                    defined('BASEPATH') OR exit('No direct script access allowed');
+                    
+                    class Welcome extends CI_Controller {
+                        public function index() {
+                            // Load the custom library
+                            $this-&gt;load-&gt;library('MyLibrary');
+                    
+                            // Using the greet method
+                            $greeting = $this-&gt;mylibrary-&gt;greet('John');
+                            
 
-        <h3>Step 2: Load the Custom Library</h3>
-        <p>You can load your custom library in a controller. Here’s how you can do that:</p>
-        <pre><code class="language-php">
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Welcome extends CI_Controller {
-    public function index() {
-        // Load the custom library
-        $this->load->library('MyLibrary');
-
-        // Using the greet method
-        $greeting = $this->mylibrary->greet('John');
-        
-        // Using the double method
-        $doubledNumber = $this->mylibrary->double(10);
-
-        // Pass data to the view
-        $data['greeting'] = $greeting;
-        $data['doubled'] = $doubledNumber;
-
-        $this->load->view('greeting_view', $data);
-    }
-}
-        </code></pre>
-
+                            // Using the double method
+                            $doubledNumber = $this-&gt;mylibrary-&gt;double(10);
+                    
+                            // Pass data to the view
+                            $data['greeting'] = $greeting;
+                            $data['doubled'] = $doubledNumber;
+                    
+                            $this-&gt;load-&gt;view('greeting_view', $data);
+                        }
+                    }
+                    ?&gt;
+                    </code></pre>
+                    
         <h3>Step 3: Create a View to Display Output</h3>
         <p>Create a view file named <code>greeting_view.php</code> under the <code>application/views</code> directory:</p>
         <pre><code class="language-html">
@@ -147,7 +149,7 @@ class Welcome extends CI_Controller {
             <li>
                 <strong>Define Helper Functions</strong>: Inside this file, you can define your helper functions. Here’s an example:
                 <pre><code class="language-php">
-<?php
+&lth;?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('format_date')) {
@@ -171,13 +173,13 @@ if (!function_exists('calculate_age')) {
         <h3>Step 2: Load the Custom Helper</h3>
         <p>Helpers can be loaded in a controller or can even be autoloaded. Here’s how to load it in a controller:</p>
         <pre><code class="language-php">
-<?php
+&lth;?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
     public function index() {
         // Load the custom helper
-        $this->load->helper('my_helper');
+        $this-&gt;load-&gt;helper('my_helper');
 
         // Using the helper functions
         $formattedDate = format_date('2023-01-15');
@@ -187,7 +189,7 @@ class User extends CI_Controller {
         $data['date'] = $formattedDate;
         $data['age'] = $age;
 
-        $this->load->view('user_view', $data);
+        $this-&gt;load-&gt;view('user_view', $data);
     }
 }
         </code></pre>
