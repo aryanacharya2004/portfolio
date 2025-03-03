@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Pagination in CodeIgniter: A Comprehensive Guide</title>
+    <meta name="description" content="Learn how to implement pagination in CodeIgniter for better data display and user experience. Step-by-step guide with examples for pagination using built-in library and limit with offset.">
+    <meta name="keywords" content="CodeIgniter, pagination, php pagination, web development, limit, offset, dynamic content">
+    <meta name="author" content="Aryan Acharya">
+    <link rel="canonical" href="http://yourdomain.com/mastering-pagination-in-codeigniter">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .navbar {
+            background-color: #34495e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            color: #fff;
+            font-size: 2rem;
+        }
+        .content {
+            padding: 30px 0;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .pagination {
+            margin: 20px 0;
+            list-style-type: none;
+            padding: 0;
+        }
+        .pagination li {
+            display: inline;
+            margin-right: 5px;
+        }
+        .pagination li a {
+            text-decoration: none;
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Aryan Acharya</a>
+            <button class="btn btn-light" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <section class="content container " style="margin-top: 50px !important;">
+        <h1>Mastering Pagination in CodeIgniter: A Comprehensive Guide</h1>
+        <p><em>Published on: October 10, 2023</em></p>
+        <hr>
+        
+        <p>Pagination is a crucial feature in web applications for providing users with a smooth experience when browsing through large sets of data. Instead of overwhelming users with too much information on one page, pagination breaks that information into smaller, more manageable chunks. CodeIgniter offers built-in support for pagination, making it easier for developers to implement this feature. In this blog post, we will explore how to implement pagination in a CodeIgniter application, using both the normal method and the limit with offset approach.</p>
+
+        <h2>Understanding Pagination in CodeIgniter</h2>
+        <p>In CodeIgniter, pagination is typically done using the pagination library, which simplifies the process of displaying data in segments. By default, when you query the database, all records are fetched at once, which can be inefficient for large datasets. Pagination allows you to fetch only a specific number of records per page and navigate through them easily.</p>
+
+        <h3>Key Features of CodeIgniter Pagination</h3>
+        <ul>
+            <li><strong>Ease of use:</strong> Provides a straightforward interface to retrieve paginated data.</li>
+            <li><strong>Customizable:</strong> Allows you to modify the appearance of pagination links.</li>
+            <li><strong>Supports multiple configurations:</strong> Base URLs, total rows, and per-page limits.</li>
+        </ul>
+
+        <h2>Setting Up Pagination in CodeIgniter</h2>
+        <p>Let’s walk through a complete example of setting up pagination in a CodeIgniter application.</p>
+
+        <h3>Step 1: Create a Database and Sample Data</h3>
+        <p>For this example, we will create a simple database with a table named <code>posts</code>, which will store blog posts. Here is the SQL to create the table and insert sample data:</p>
+        <pre><code>
+CREATE TABLE posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL
+);
+
+INSERT INTO posts (title, content) VALUES
+('Post 1', 'Content for post 1'),
+('Post 2', 'Content for post 2'),
+('Post 3', 'Content for post 3'),
+('Post 4', 'Content for post 4'),
+('Post 5', 'Content for post 5'),
+('Post 6', 'Content for post 6'),
+('Post 7', 'Content for post 7'),
+('Post 8', 'Content for post 8'),
+('Post 9', 'Content for post 9'),
+('Post 10', 'Content for post 10'),
+('Post 11', 'Content for post 11');
+        </code></pre>
+
+        <h3>Step 2: Load the Pagination Library</h3>
+        <p>You need to load the pagination library in your controller. Here’s an example:</p>
+        <pre><code>
+// application/controllers/Posts.php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Posts extends CI_Controller {
+
+    public function index($page = 0) {
+        $this->load->library('pagination');
+        $this->load->model('Post_model'); // We will create this model next
+
+        // Configuration for pagination
+        $config['base_url'] = site_url('posts/index'); // URL for pagination links
+        $config['total_rows'] = $this->Post_model->count_posts(); // Fetch total posts
+        $config['per_page'] = 5; // Number of records to show per page
+        $config['uri_segment'] = 3; // URI segment to identify the page number
+
+        // Initialize the pagination library
+        $this->pagination->initialize($config);
+
+        // Fetch posts for the current page
+        $data['posts'] = $this->Post_model->get_posts($config['per_page'], $page);
+        
+        // Create pagination links
+        $data['pagination_links'] = $this->pagination->create_links();
+
+        // Load the view
+        $this->load->view('posts_view', $data);
+    }
+}
+        </code></pre>
+
+        <h3>Step 3: Create a Model for Database Access</h3>
+        <p>Now, let's create a simple model for accessing the posts table:</p>
+        <pre><code>
+// application/models/Post_model.php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Post_model extends CI_Model {
+
+    public function get_posts($limit, $offset) {
+        return $this->db->get('posts', $limit, $offset)->result();
+    }
+
+    public function count_posts() {
+        return $this->db->count_all('posts');
+    }
+}
+        </code></pre>
+
+        <h3>Step 4: Create the View to Display the Posts</h3>
+        <p>Next, we will create a view file to display the posts along with pagination links. Create a file named <code>posts_view.php</code> under the <code>application/views</code> directory:</p>
+        <pre>
+            
+            <code>
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Posts Pagination Example</title>
+                </head>
+                <body>
+                    <h1>Blog Posts Pagination in CodeIgniter</h1>
+                    <p>Here is the PHP code to implement pagination in CodeIgniter:</p>
+                
+                    <pre><code>
+                &lt;?php foreach($posts as $post): ?&gt;
+                    &lt;h2&gt;&lt;?php echo $post-&gt;title; ?&gt;&lt;/h2&gt;
+                    &lt;p&gt;&lt;?php echo $post-&gt;content; ?&gt;&lt;/p&gt;
+                    &lt;hr&gt;
+                &lt;?php endforeach; ?&gt;
+                
+                &lt;ul class="pagination"&gt;
+                    &lt;?php echo $pagination_links; ?&gt;
+                &lt;/ul&gt;
+                    </code></pre>
+                
+                </body>
+                </html>
+                
+        </code></pre>
+
+        <h3>Step 5: Accessing the Pagination</h3>
+        <p>When you navigate to <code>http://localhost/your_project/index.php/posts/index</code>, you will see a list of posts with pagination links at the bottom. If you have more entries than the specified limit (in this case, 5), you will be able to navigate through pages.</p>
+
+        <h2>Using Limit and Offset in CodeIgniter Pagination</h2>
+        <p>In the previous example, we utilized CodeIgniter's built-in pagination library. For clarity, let’s explain limit and offset in more detail.</p>
+
+        <h3>What are Limit and Offset?</h3>
+        <ul>
+            <li><strong>Limit:</strong> Specifies the maximum number of records to return.</li>
+            <li><strong>Offset:</strong> Specifies the starting point from which to return records.</li>
+        </ul>
+        <p>When fetching paginated results, limit and offset are typically used together. For example, if you want to fetch items 6 through 10, the limit would be 5 (the number of items to return), and the offset would be 5 (the starting point).</p>
+
+        <h3>Code Example for Limit and Offset</h3>
+        <p>Here’s how you might directly implement limit and offset without using the pagination library:</p>
+        <pre><code>
+// application/controllers/Posts.php (without pagination library)
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Posts extends CI_Controller {
+    
+    public function index($page = 0) {
+        $this->load->model('Post_model');
+
+        // Set limit and offset
+        $limit = 5; // Number of records per page
+        $offset = $page; // This can be 0, 5, 10, etc.
+
+        $data['posts'] = $this->Post_model->get_posts($limit, $offset);
+        
+        // Load the view
+        $this->load->view('posts_view', $data);
+    }
+}
+        </code></pre>
+
+        <h2>Conclusion</h2>
+        <p>Pagination is an essential feature for any web application that handles large datasets, and CodeIgniter makes it easier to implement this with its pagination library. By understanding how to set up your pagination, load data with limit and offset, and create user-friendly navigation links, you can enhance the usability of your application.</p>
+        <p>In this blog post, we covered how to implement pagination in CodeIgniter, using both the normal method and the limit/offset approach. As you build larger applications, mastering these concepts will allow you to create a smoother, more efficient user experience.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2023 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

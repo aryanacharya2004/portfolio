@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working with Multiple Databases in CodeIgniter: A Comprehensive Guide</title>
+    <meta name="description" content="Explore how to set up and manage multiple databases in CodeIgniter. This guide covers configuration, loading databases in controllers, handling transactions, and more.">
+    <meta name="keywords" content="CodeIgniter, multiple databases, PHP, web development, database configuration, transactions">
+    <meta name="author" content="Aryan Acharya">
+    <link rel="canonical" href="http://yourdomain.com/working-with-multiple-databases-in-codeigniter">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .navbar {
+            background-color: #34495e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            color: #fff;
+        }
+        .content {
+            padding: 30px 0;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Aryan Acharya</a>
+            <button class="btn btn-light" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <section class="content container " style="margin-top: 50px !important;">
+        <h1>Working with Multiple Databases in CodeIgniter: A Comprehensive Guide</h1>
+        <p><em>Published on: October 10, 2023</em></p>
+        <hr>
+        
+        <p>Web applications often require interaction with multiple databases, especially in complex systems that separate concerns or maintain separate data stores for different functionalities. CodeIgniter provides an efficient way to work with multiple databases through its database configuration settings. In this blog post, we will explore how to set up and use multiple databases in a CodeIgniter application.</p>
+
+        <h2>Understanding Multiple Database Support in CodeIgniter</h2>
+        <p>CodeIgniter allows you to connect to multiple databases by configuring them in the <code>database.php</code> configuration file. Using multiple databases allows you to execute queries across different data sources, enhancing your application's flexibility.</p>
+
+        <h3>Key Features of CodeIgniter's Multiple Database Support</h3>
+        <ul>
+            <li><strong>Ease of Configuration:</strong> Setting up multiple databases is straightforward and requires minimal configuration changes.</li>
+            <li><strong>Flexible Query Options:</strong> You can switch between databases as needed to retrieve or manipulate data.</li>
+            <li><strong>Transaction Support:</strong> CodeIgniter provides transaction support across multiple databases, ensuring data integrity.</li>
+        </ul>
+
+        <h2>Setting Up Multiple Databases in CodeIgniter</h2>
+        <p>Let’s walk through a step-by-step guide to set up multiple databases in CodeIgniter.</p>
+
+        <h3>Step 1: Configure Database Connections</h3>
+        <p>Open the configuration file located at <code>application/config/database.php</code>. Add multiple database configurations as shown below:</p>
+        <pre><code>
+$db['default'] = array(
+    'dsn' => '',
+    'hostname' => 'localhost',
+    'username' => 'user1',
+    'password' => 'password1',
+    'database' => 'db1',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
+$db['second_db'] = array(
+    'dsn' => '',
+    'hostname' => 'localhost',
+    'username' => 'user2',
+    'password' => 'password2',
+    'database' => 'db2',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+        </code></pre>
+
+        <h3>Step 2: Loading Multiple Databases in Your Model or Controller</h3>
+        <p>You can now access both databases through the model or controller. Here’s an example:</p>
+        <pre><code>
+// application/controllers/MultiDatabaseController.php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class MultiDatabaseController extends CI_Controller {
+    
+    public function index() {
+        // Load the database for db1
+        $this->load->database('default');
+
+        // Get posts from db1
+        $posts = $this->db->get('posts')->result();
+
+        // Switch to second_db and get products from db2
+        $this->load->database('second_db', TRUE); // TRUE indicates a new connection
+        $products = $this->db->get('products')->result();
+
+        // Prepare data array for view
+        $data = [
+            'posts' => $posts,
+            'products' => $products
+        ];
+
+        // Load the view
+        $this->load->view('multi_db_view', $data);
+    }
+}
+        </code></pre>
+
+        <h3>Step 3: Creating a View to Display Data</h3>
+        <p>Create a view file named <code>multi_db_view.php</code> in the <code>application/views</code> directory:</p>
+        <pre>
+            <code>
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Multi Database Example</title>
+                </head>
+                <body>
+                    <h1>Posts from Database 1</h1>
+                    <ul>
+                        &lt;?php foreach ($posts as $post): ?&gt;
+                            &lt;li&gt;&lt;?php echo $post-&gt;title; ?&gt;&lt;/li&gt;
+                        &lt;?php endforeach; ?&gt;
+                    </ul>
+        
+                    <h1>Products from Database 2</h1>
+                    <ul>
+                        &lt;?php foreach ($products as $product): ?&gt;
+                            &lt;li&gt;&lt;?php echo $product-&gt;name; ?&gt;&lt;/li&gt;
+                        &lt;?php endforeach; ?&gt;
+                    </ul>
+                </body>
+                </html>
+            </code>
+        </pre>
+        
+        <h3>Step 4: Accessing the Controller</h3>
+        <p>To view the output, navigate to <code>http://localhost/your_project/index.php/multidatabasecontroller/index</code>. You should see a list of posts from the first database and a list of products from the second.</p>
+
+        <h2>Handling Transactions Across Multiple Databases</h2>
+        <p>One of the most critical aspects of using multiple databases is managing transactions correctly. CodeIgniter provides transaction support, but keep in mind that it may not work as expected when conducting transactions across multiple databases.</p>
+        <p>Here’s how you can manage transactions manually:</p>
+        <pre><code>
+$this->load->database('default');
+$this->db->trans_start(); // Start the transaction
+
+// Perform some database operations on db1
+$this->db->insert('posts', $data);
+
+// Switch to the second database and perform operations
+$this->load->database('second_db', TRUE); // New connection
+$this->db->insert('products', $product_data);
+
+$this->db->trans_complete(); // End the transaction
+
+if ($this->db->trans_status() === FALSE) {
+    // Transaction failed, handle accordingly
+} else {
+    // Transaction succeeded
+}
+        </code></pre>
+
+        <h2>Conclusion</h2>
+        <p>CodeIgniter makes working with multiple databases straightforward through simple configuration and flexible query options. By following the steps outlined in this blog, you can efficiently fetch and manipulate data from multiple databases, allowing for complex functionality in your web applications.</p>
+        <p>Mastering this capability can significantly enhance your application's versatility and scalability, particularly if you're dealing with systems that require data segregation or specialization. Embrace the power of multiple databases in CodeIgniter, and elevate your development skills further! Happy coding!</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2023 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

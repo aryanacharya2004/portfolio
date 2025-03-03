@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Acharya - Portfolio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.css" rel="stylesheet" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    
+    <!-- DataTables CSS -->
+    <link defer rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+    <!-- DataTables CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> -->
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        /* Navbar Styling */
+        .navbar {
+            background-color: #34495e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            color: #fff;
+            font-size: 2rem;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #3498db !important;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 30px;
+            animation: slideIn 1s ease-out;
+           
+        }
+        /* Fade-in Animation */
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .card-body {
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+        .card-header {
+            background-color: #2980b9;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .card-header:hover {
+            background-color: #3498db;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .table {
+            margin-top: 30px;
+        }
+        .pagination {
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Aryan Acharya</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experience">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blogs">Blogs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="section bg-light py-5">
+        <div class="container text-center">
+            <h2 class="section-title animate mt-5">About Me</h2>
+            <p>Motivated BCA graduate currently pursuing an MCA, with hands-on experience as an Intern at BCS (Jan 2024 - Feb 2024) and later as a Trainee Developer at OIMS IT. Skilled in web development and programming, particularly using CodeIgniter, PHP, SQL, HTML, CSS, JavaScript, Bootstrap, Ajax, and REST API. Proven ability to develop and maintain web applications across various sectors, including healthcare and multi-business platforms. Eager to leverage my expanding skill set and real-world experience in a dynamic professional environment.</p>
+ </div>
+    </section>
+
+    <!-- Professional Summary Section -->
+
+
+    <!-- Skills Section -->
+    <section id="skills" class="section bg-light py-5">
+        <div class="container text-center">
+            <h2 class="section-title animate">Skills</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">Programming Languages</div>
+                        <div class="card-body">
+                            <p>JavaScript, HTML, CSS, PHP</p>
+                            <div class="skills-bar" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">Frameworks</div>
+                        <div class="card-body">
+                            <p>CodeIgniter, Bootstrap</p>
+                            <div class="skills-bar" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">Database Management</div>
+                        <div class="card-body">
+                            <p>SQL, MySQL</p>
+                            <div class="skills-bar" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header">Other Skills</div>
+                        <div class="card-body">
+                            <p>Web Development, Web Designing, Web Applications, Ajax, REST API, Git/GitHub</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section bg-light py-5">
+        <div class="container">
+            <h2 class="section-title animate text-center">Work Experience</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Trainee Developer, OIMS IT (March 2024 - Present)</div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Designed and developed web applications using CodeIgniter, PHP, SQL, HTML, CSS, JavaScript, Bootstrap, Ajax, and REST API.</li>
+                                <li>Worked with a team on multiple projects, including Learning Management Systems (LMS), KMC Medical College Website, and Library Management System (LMS).</li>
+                                <li>Collaborated with teams to implement secure and efficient functionalities.</li>
+                                <li>Worked independently on a Yatra - Tour & Travel Website, enhancing the user experience for travelers.</li>
+                                <li>Worked independently on an Ongoing Learning Management System (LMS), focusing on CRUD operations, user role management, and dynamic content display.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Intern, BCS (Jan 2024 - Feb 2024)</div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Developed and maintained web applications using CodeIgniter, PHP, SQL, HTML, CSS, JavaScript, Bootstrap, Ajax, and REST API.</li>
+                                <li>Worked with a team on a Multi-Business Website and a Hospital Management System (HMS) during the internship period.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section py-5 bg-white">
+        <div class="container text-center">
+            <h2 class="section-title animate">Projects</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">KMC Medical College Website</div>
+                        <div class="card-body">
+                            <p>Worked with a team to create a professional website for KMC Medical College, Uttar Pradesh.</p>
+                            <p>Technologies Used: HTML, CSS, JavaScript, PHP, Bootstrap, Ajax</p>
+                            <a href="https://kmcmedicalcollege.com/" target="_blank" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">KMC Medical College Library Management System</div>
+                        <div class="card-body">
+                            <p>Worked with a team to develop an LMS for managing library operations at KMC Medical College.</p>
+                            <p>Technologies Used: PHP, CodeIgniter, JavaScript, HTML, CSS, Bootstrap, SQL</p>
+                            <a href="https://kmcmedicalcollege.in/lms/login/index" target="_blank" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">Learning Management System (Ongoing)</div>
+                        <div class="card-body">
+                            <p>Independently developing a feature-rich LMS for medical institutions.</p>
+                            <p>Technologies Used: PHP, CodeIgniter, JavaScript, SQL, Bootstrap, Ajax</p>
+                            <a href="https://lms.oimsdoc.com/" target="_blank" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">Yatra - Tour & Travel Website</div>
+                        <div class="card-body">
+                            <p>Independently developed a responsive tour and travel website enabling users to explore various destinations.</p>
+                            <p>Technologies Used: HTML, CSS, JavaScript</p>
+                            <a href="https://aryanacharya2004.github.io/yatra-tour-and-travel-/" target="_blank" class="btn btn-primary">View Project</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">Hospital Management System</div>
+                        <div class="card-body">
+                            <p>Worked with a team to develop a comprehensive system for managing hospital operations.</p>
+                            <p>Technologies Used: JavaScript, HTML, CSS, PHP, CodeIgniter, SQL, Bootstrap, Ajax</p>
+                            <!-- <a href="#" target="_blank" class="btn btn-primary">View Project</a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card project-card shadow-sm">
+                        <div class="card-header">Multi-Business Website</div>
+                        <div class="card-body">
+                            <p>Worked with a team to create a platform to support multiple businesses.</p>
+                            <p>Technologies Used: CodeIgniter, JavaScript, HTML, CSS, PHP, Bootstrap, Ajax</p>
+                            <!-- <a href="#" target="_blank" class="btn btn-primary">View Project</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section with DataTables Integration -->
+    <section id="blogtable" class="section py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="section-title animate">My Blogs</h2>
+            <p class="lead">Here are some of my latest blog posts.</p>
+            
+            <!-- Table of Blogs -->
+            <table id="documentTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No</th> <!-- New Column for Serial Number -->
+                        <th>Blog Title</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td> <!-- Empty cell for S.No -->
+                        <td>Exploring CodeIgniter: The Optimal PHP Framework for Backend Development</td>
+                        <td><a href="blog1.html" class="btn btn-primary">Read More</a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td> <!-- Empty cell for S.No -->
+                        <td>Mastering Libraries and Helpers in CodeIgniter: A Comprehensive Guide</td>
+                        <td><a href="blog2.html" class="btn btn-primary">Read More</a></td>
+                    </tr>
+                    <tr>
+                        <td>3</td> <!-- Empty cell for S.No -->
+                        <td>Mastering Pagination in CodeIgniter: A Comprehensive Guide</td>
+                        <td><a href="blog3.html" class="btn btn-primary">Read More</a></td>
+                    </tr>
+                    <tr>
+                        <td>4</td> <!-- Empty cell for S.No -->
+                        <td>Working with Multiple Databases in CodeIgniter: A Comprehensive Guide</td>
+                        <td><a href="blog4.html" class="btn btn-primary">Read More</a></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+            
+            
+        </div>
+    </section>
+    
+    <!-- jQuery and DataTables JS -->
+   
+    
+    <!-- Contact Section -->
+    <section id="contact" class="section py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="section-title animate">Contact Me</h2>
+            <p>If you'd like to get in touch, feel free to contact me via email or LinkedIn.</p>
+            <p>Email: <a href="mailto:aryan9931710364@gmail.com">aryan9931710364@gmail.com</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/aryan-acharya/" target="_blank">Visit my LinkedIn</a></p>
+      
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+    <!-- jQuery and DataTables JS -->
+    <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <!-- jQuery (move it to the top) -->
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    
+    <script>
+$(document).ready(function() {
+    // Initialize DataTable
+    var table = $('#documentTable').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "pageLength": 5,  // Set the number of rows per page to 10
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+
+    });
+
+});
+
+    </script>
+    
+
+</body>
+</html>
