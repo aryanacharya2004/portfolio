@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building an Image Resizer: A Detailed Guide</title>
+    <meta name="description" content="Learn how to build a simple image resizer tool using HTML, CSS, and JavaScript. Resize images dynamically with a user-friendly interface." />
+    <meta name="keywords" content="image resizer, web development, image processing, resize image online, JavaScript image resizer" />
+    <meta name="author" content="Aryan Acharya">
+    <link rel="canonical" href="http://yourdomain.com/building-image-resizer">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding-top: 70px; /* Space for navbar */
+        }
+
+        .navbar {
+            background-color: #34495e;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .content {
+            padding: 30px 0;
+        }
+
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .resizer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 5%;
+        }
+
+        .resizer-container input {
+            padding: 10px;
+            width: 150px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .resizer-container button {
+            padding: 10px 20px;
+            background-color: #34495e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .resizer-container button:hover {
+            background-color: #2c3e50;
+        }
+
+        .image-display {
+            max-width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Aryan Acharya</a>
+            <button class="btn btn-light" onclick="window.history.back();">
+                Back
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <section class="content container" style="margin-top: 50px !important;">
+        <h1>Building an Image Resizer: A Detailed Guide</h1>
+        <p><em>Published on: March 6, 2025</em></p>
+        <hr>
+
+        <p>In web development, image processing tools can come in handy for resizing images for various purposes like optimizing web performance or changing image dimensions. In this blog post, I will show you how to build a simple image resizer tool using HTML, CSS, and JavaScript.</p>
+
+        <h2>Understanding the Functionality of the Image Resizer</h2>
+        <p>The image resizer allows users to upload an image, specify the new width and height for resizing, and view the resized image in real-time. This tool does not involve server-side processing, as everything is handled on the client side using JavaScript.</p>
+
+        <h3>Key Features of the Image Resizer</h3>
+        <ul>
+            <li><strong>Upload and Resize:</strong> Users can upload an image and input the desired width and height to resize the image instantly.</li>
+            <li><strong>Real-time Preview:</strong> The resized image is displayed immediately after the user enters the new dimensions.</li>
+            <li><strong>Easy-to-Use Interface:</strong> A simple and intuitive layout makes it easy for anyone to use the image resizer tool.</li>
+        </ul>
+
+        <h2>Setting Up the Image Resizer</h2>
+        <p>Now, let’s break down the core components of the image resizer, including the HTML structure, CSS styling, and JavaScript functionality.</p>
+
+        <h3>Step 1: HTML Structure</h3>
+        <p>The HTML structure sets up the layout of the image resizer tool. It consists of an input to upload the image, text fields for the width and height, and a button to trigger the resizing action:</p>
+
+        <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Image Resizer&lt;/title&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1 class="mt-5"&gt;Image Resizer&lt;/h1&gt;
+        &lt;div class="resizer-container"&gt;
+            &lt;input type="file" id="imageInput" accept="image/*"&gt;
+            &lt;input type="number" id="widthInput" placeholder="Width"&gt;
+            &lt;input type="number" id="heightInput" placeholder="Height"&gt;
+            &lt;button onclick="resizeImage()"&gt;Resize Image&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;img id="resizedImage" class="image-display"&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+
+        <h3>Step 2: CSS Styling</h3>
+        <p>The CSS styling is used to create a clean, responsive layout for the image resizer. The inputs are styled for better user interaction, and the image is displayed neatly with proper borders:</p>
+
+        <pre><code>
+&lt;style&gt;
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        padding-top: 70px; /* Space for navbar */
+    }
+
+    .resizer-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin: 20px 5%;
+    }
+
+    .resizer-container input {
+        padding: 10px;
+        width: 150px;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .resizer-container button {
+        padding: 10px 20px;
+        background-color: #34495e;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .resizer-container button:hover {
+        background-color: #2c3e50;
+    }
+
+    .image-display {
+        max-width: 100%;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+&lt;/style&gt;
+        </code></pre>
+
+        <h3>Step 3: JavaScript Logic</h3>
+        <p>The JavaScript code is responsible for resizing the image based on the user input for width and height. Once the user selects an image and enters the desired dimensions, the image is resized and displayed in the preview. Here's the breakdown of the JavaScript functionality:</p>
+
+        <pre><code>
+&lt;script&gt;
+// Get references to relevant DOM elements
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const imagePreview = document.getElementById('imagePreview');
+const canvas = document.createElement('canvas'); // Create a canvas for image manipulation
+const ctx = canvas.getContext('2d'); // Get the 2D drawing context
+
+// Handle file input change (file chooser)
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0]; // Get the first file from the input
+    if (file) {
+        loadImage(file); // Call the loadImage function with the file
+    }
+});
+
+// Load image into img element and draw on canvas
+function loadImage(file) {
+    const reader = new FileReader(); // Create a FileReader instance
+    reader.onload = function (event) {
+        img.src = event.target.result; // Set the source of the img element to the file's data URL
+    };
+    reader.readAsDataURL(file); // Read the file as a Data URL
+}
+
+// Once image is loaded, display preview and draw to canvas
+img.onload = function () {
+    imagePreview.style.display = 'block'; // Show the image preview
+    imagePreview.src = img.src; // Set the preview's source to the image's source
+    canvas.width = img.width; // Set canvas width to image width
+    canvas.height = img.height; // Set canvas height to image height
+    ctx.drawImage(img, 0, 0, img.width, img.height); // Draw the image onto the canvas
+};
+
+// Update the quality value display as the slider is adjusted
+qualitySlider.addEventListener('input', function () {
+    qualityValue.textContent = `Quality: ${qualitySlider.value}%`; // Display the current quality
+});
+
+// Compress image when button is clicked
+compressImageButton.addEventListener('click', () => {
+    if (!img.src) {
+        alert('Please upload an image first!'); // Alert if no image is uploaded
+        return;
+    }
+
+    let quality = qualitySlider.value / 100; // Get the current quality from the slider
+    let resizePercentage = resizePercentageSlider.value / 100; // Get resize percentage
+    let width = img.width * resizePercentage; // Calculate new width
+    let height = img.height * resizePercentage; // Calculate new height
+
+    // If specific pixel dimensions are provided, use them instead of percentage
+    if (resizeWidthInput.value && resizeHeightInput.value) {
+        width = parseInt(resizeWidthInput.value);
+        height = parseInt(resizeHeightInput.value);
+    }
+
+    canvas.width = width; // Set canvas width for resized image
+    canvas.height = height; // Set canvas height for resized image
+
+    // Draw resized image on canvas
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+
+    // Get the compressed image data URL
+    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+
+    // Update download link
+    downloadLink.href = compressedDataUrl; // Set download link's href to compressed image
+    downloadLink.style.display = 'block'; // Show the download link
+    downloadLink.download = 'compressed-image.jpg'; // Set default file name for download
+});
+&lt;/script&gt;
+        </code></pre>
+
+        <h3>JavaScript Code Explanation</h3>
+        <p>Here's a detailed explanation of what the JavaScript code does:</p>
+        <ul>
+            <li><strong>Element References:</strong> The code starts by getting references to the necessary HTML elements like the input for file selection, the image preview element, and a newly created canvas that will be used to draw and resize the uploaded image.</li>
+            <li><strong>File Selection:</strong> An event listener is added to the file input to handle when the user selects a file. It retrieves the file and calls the <code>loadImage</code> function with it.</li>
+            <li><strong>Load Image:</strong> The <code>loadImage</code> function reads the uploaded image file using the <code>FileReader</code> and sets the image source to the resulting data URL.</li>
+            <li><strong>Image Load Event:</strong> An event listener waits for the image to load, displays it in the preview element, initializes the canvas dimensions, and draws the image onto the canvas.</li>
+            <li><strong>Quality and Resize Sliders:</strong> Additional event listeners update the displayed quality percentage dynamically as the user adjusts the quality and resize sliders.</li>
+            <li><strong>Image Compression:</strong> When the compress button is clicked, the code checks if an image is uploaded, retrieves the resizing dimensions, and the quality settings, and draws the resized image on the canvas. Finally, it generates a Data URL for the compressed image and sets it to a download link to allow the user to save it.</li>
+        </ul>
+
+        <h2>Testing and Deployment</h2>
+        <p>Once the image resizer was implemented, I tested it by uploading different images and resizing them using various dimensions. The tool worked flawlessly, providing a quick and easy way to resize images on the fly.</p>
+
+        <h2>Conclusion</h2>
+        <p>Building an image resizer tool with HTML, CSS, and JavaScript is a great way to learn about handling image files on the client side. This tool can be further enhanced by adding features like cropping, rotating, or optimizing images. I hope this guide helps anyone interested in creating a similar tool. Happy coding!</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

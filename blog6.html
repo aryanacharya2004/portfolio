@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Versatile Image Converter Tool: A Detailed Guide</title>
+    <meta name="description" content="Learn how to create an image converter tool that supports multiple formats including JPG, PNG, JPEG, and WebP. Follow this comprehensive guide for a step-by-step breakdown of the code logic and implementation.">
+    <meta name="keywords" content="image converter, JPG to PNG, PNG to JPG, WebP conversion, JavaScript image tool, HTML5 canvas">
+    <meta name="author" content="Aryan Acharya">
+    <link rel="canonical" href="http://yourdomain.com/building-image-converter-tool">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .navbar {
+            background-color: #34495e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-brand {
+            color: #fff;
+            font-size: 2rem;
+        }
+        .content {
+            padding: 30px 0;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Aryan Acharya</a>
+            <button class="btn btn-light" onclick="window.history.back();">
+                Back
+            </button>
+        </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <section class="content container" style="margin-top: 50px !important;">
+        <h1>Building a Versatile Image Converter Tool: A Detailed Guide</h1>
+        <p><em>Published on: October 10, 2023</em></p>
+        <hr>
+
+        <p>In today's digital age, image formats are abundant and often incompatible with various platforms and devices. To address this issue, I created a versatile image converter tool that allows users to convert images across multiple formats — specifically JPG, PNG, JPEG, and WebP. This blog post provides a detailed breakdown of the tool's functionality, code logic, and how to implement it effectively.</p>
+
+        <h2>Understanding the Functionality of the Image Converter</h2>
+        <p>The image converter tool provides a user-friendly interface for uploading images and converting them between different formats. Users can simply drag-and-drop or select a file from their device, choose the desired output format, and download the converted image.</p>
+
+        <h3>Key Features of the Image Converter</h3>
+        <ul>
+            <li><strong>Multiple Format Support:</strong> The tool supports JPG, PNG, JPEG, and WebP formats, allowing users to convert between these formats seamlessly.</li>
+            <li><strong>Real-time Image Processing:</strong> Users can view their uploaded images immediately, ensuring they know what they’re converting.</li>
+            <li><strong>HTML5 Canvas Utilization:</strong> The backend uses the HTML5 canvas element to draw and manipulate images before converting them.</li>
+        </ul>
+
+        <h2>Setting Up the Image Converter Tool</h2>
+        <p>Let’s walk through the core components of the image converter, including the HTML structure, styling, and JavaScript logic.</p>
+
+        <h3>Step 1: HTML Structure</h3>
+        <p>The HTML layout defines the primary interface of the tool. It includes a navigation bar, a drop zone for image uploads, file input options, and conversion buttons for different formats:</p>
+        
+        <pre><code>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Image Converter&lt;/title&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Main Content --&gt;
+    &lt;div class="container"&gt;
+        &lt;h1 class="mt-5"&gt;Convert Your Images&lt;/h1&gt;
+        &lt;!-- Drag and Drop Zone --&gt;
+        &lt;div class="drop-zone" id="dropZone"&gt;Drag &amp; Drop an Image Here&lt;/div&gt;
+        &lt;!-- Choose File Zone --&gt;
+        &lt;div class="choose-file-container"&gt;
+            &lt;input type="file" id="fileInput" accept="image/*" /&gt;
+            &lt;span&gt;or&lt;/span&gt;
+            &lt;button type="button" onclick="document.getElementById('fileInput').click()"&gt;Choose File&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;!-- Conversion Buttons --&gt;
+        &lt;div class="convert-btns"&gt;
+            &lt;button id="convertJpgToPng"&gt;Convert JPG to PNG&lt;/button&gt;
+            &lt;button id="convertJpegToPng"&gt;Convert JPEG to PNG&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+
+        <h3>Step 2: CSS Styling</h3>
+        <p>The CSS styles enhance the visual aesthetics of the converter, ensuring a clean and engaging user experience. Key styles include:</p>
+        
+        <pre><code>
+&lt;style&gt;
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        padding-top: 70px; /* Space for navbar */
+    }
+    .drop-zone {
+        width: 100%;
+        height: 200px;
+        border: 2px dashed #ccc;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+&lt;/style&gt;
+        </code></pre>
+
+        <h3>Step 3: JavaScript Logic</h3>
+        <p>This is where the functionality of the tool comes into play. The JavaScript listens for file selection or drag-and-drop actions to load and process images using the HTML5 canvas. Here’s the key logic:</p>
+
+        <pre><code>
+&lt;script&gt;
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('dragover', (e) =&gt; {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('drop', (e) =&gt; {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        // Load and process file here
+    });
+&lt;/script&gt;
+        </code></pre>
+
+        <h3>JavaScript Code Explanation</h3>
+        <p>Here's a detailed explanation of what the JavaScript code does:</p>
+        <ul>
+            <li><strong>Element References:</strong> The code first grabs references to the drop zone where users can drag and drop images, along with file input and button elements for triggering file selection.</li>
+            <li><strong>Drag-and-Drop Functionality:</strong> Event listeners are set up for <code>dragover</code> and <code>drop</code> events. When a user drags a file over the drop zone, the dragging state is visually indicated. When a file is dropped, this triggers the file processing.</li>
+            <li><strong>Loading Images:</strong> Once a file is dropped, the next step is to load this image into the canvas for manipulation. This can be done with the <code>FileReader</code> API, which reads the file as a data URL.</li>
+        </ul>
+
+        <h3>Step 4: Image Conversion Functions</h3>
+        <p>Each conversion button corresponds to a specific event listener that uses the canvas element's <code>toDataURL()</code> method to generate a new image format. Here’s how this functionality looks:</p>
+
+        <pre><code>
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const convertJpgToPng = document.getElementById('convertJpgToPng');
+            const convertJpegToPng = document.getElementById('convertJpegToPng');
+            const downloadLink = document.createElement('a'); // Create a download link dynamically
+            const imagePreview = document.createElement('img'); // Create an image preview element
+            const canvas = document.createElement('canvas'); // Create a canvas element
+            const ctx = canvas.getContext('2d'); // Get the 2D drawing context
+            let img = new Image(); // Create a new image instance
+            
+            // Handle file input change (file chooser)
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    loadImage(file);
+                }
+            });
+    
+            // Handle drag and drop events
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Prevent default behavior to allow drop
+                dropZone.classList.add('dragover');
+            });
+    
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+    
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    loadImage(file);
+                }
+            });
+    
+            // Function to load and display the image
+            function loadImage(file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    img.src = event.target.result; // Set the image source to the loaded file
+                };
+                reader.readAsDataURL(file); // Read the file as data URL
+            }
+    
+            // When the image is loaded, display it and prepare for conversion
+            img.onload = function() {
+                imagePreview.style.display = 'block'; // Display the image preview
+                imagePreview.src = img.src; // Set the source of the image preview
+    
+                // Set canvas dimensions to the fixed size (300x300)
+                canvas.width = 300; 
+                canvas.height = 300; 
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
+                ctx.drawImage(img, 0, 0, 300, 300); // Draw image with fixed size
+            };
+    
+            // Function to show a message if no image is uploaded
+            function showAlert() {
+                alert('Please select an image before converting!');
+            }
+    
+            // Convert JPG to PNG
+            convertJpgToPng.addEventListener('click', () => {
+                if (!img.src) {
+                    showAlert();
+                } else {
+                    const pngDataUrl = canvas.toDataURL('image/png'); // Convert canvas to PNG format
+                    downloadLink.href = pngDataUrl; // Set download link href
+                    downloadLink.style.display = 'block'; // Display the download link
+                    downloadLink.download = 'converted-image.png'; // Set default download file name
+                }
+            });
+    
+            // Convert JPEG to PNG
+            convertJpegToPng.addEventListener('click', () => {
+                // Similar to JPG to PNG conversion
+            });
+            
+            // Additional conversion functions can be added here...
+        </code></pre>
+
+        <h2>Testing and Deployment</h2>
+        <p>Once the tool was coded, I tested various image formats to ensure all conversions worked correctly. This step involved numerous trial conversions to handle edge cases. After successfully compiling the tool, it was hosted on my domain for public use.</p>
+
+        <h2>Conclusion</h2>
+        <p>Creating an image converter tool using JavaScript, HTML5, and CSS was a fulfilling experience that deepened my understanding of web technologies. This project not only highlights the versatility of the canvas element but also empowers users with a practical utility. I hope this guide serves as a valuable resource for anyone interested in developing similar tools. Happy coding!</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2023 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
