@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple tool to convert JPG, JPEG, PNG, WebP images to different formats like PNG, JPG, JPEG, and WebP." />
+    <meta name="keywords" content="image converter, convert png to jpg, convert jpg to png, convert jpeg to png, convert png to jpeg, convert webp to png, convert png to webp" />
+    <meta name="author" content="Aryan Acharya " />
+    <title>Image Converter - JPG, PNG, JPEG, WebP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding-top: 70px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #34495e;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .drop-zone {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ccc;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .drop-zone.dragover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .choose-file-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .choose-file-container input {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            margin-top: 20px;
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .convert-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .convert-btns button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            margin: 20px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .convert-btns button:hover {
+            background-color: #45a049;
+        }
+
+        #downloadLink {
+            display: none;
+            margin: 20px;
+        }
+
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 1rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Aryan Acharya</a>
+            <button class="btn btn-light" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="mt-5">Convert Your Images</h1>
+
+        <!-- Drag and Drop Zone -->
+        <div class="drop-zone" id="dropZone">
+            Drag & Drop an Image Here
+        </div>
+
+        <!-- Choose File Zone -->
+        <div class="choose-file-container">
+            <input type="file" id="fileInput" accept="image/*" />
+            <span>or</span>
+            <button type="button" onclick="document.getElementById('fileInput').click()">Choose File</button>
+        </div>
+
+        <!-- Image Preview -->
+        <img id="imagePreview" class="image-preview" style="display: none;" />
+
+        <!-- Canvas for displaying image -->
+        <canvas id="canvas" style="display:none;"></canvas>
+
+        <!-- Conversion Buttons (always visible) -->
+        <div class="convert-btns">
+            <button id="convertJpgToPng">Convert JPG to PNG</button>
+            <button id="convertJpegToPng">Convert JPEG to PNG</button>
+            <button id="convertPngToJpg">Convert PNG to JPG</button>
+            <button id="convertPngToJpeg">Convert PNG to JPEG</button>
+            <button id="convertJpegToJpg">Convert JPEG to JPG</button>
+            <button id="convertJpgToJpeg">Convert JPG to JPEG</button>
+            <!-- WebP Conversion Buttons -->
+            <button id="convertPngToWebp">Convert PNG to WebP</button>
+            <button id="convertWebpToPng">Convert WebP to PNG</button>
+            <button id="convertJpgToWebp">Convert JPG to WebP</button>
+            <button id="convertWebpToJpg">Convert WebP to JPG</button>
+            <button id="convertJpegToWebp">Convert JPEG to WebP</button>
+            <button id="convertWebpToJpeg">Convert WebP to JPEG</button>
+        </div>
+
+        <!-- Download Link -->
+        <a id="downloadLink" style="display: none;" download="converted-image.png">
+            <button>Download Image</button>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aryan Acharya | All Rights Reserved</p>
+    </footer>
+
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy3H8xuvf8H6wFtD0dYwE1hX7sWm3pLOwnAau3i5" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0gfhz6gK8K1Oyzs9f7c4xjv8i6EoD1qN0vUq8hMABR8hToxM" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0gfhz6gK8K1Oyzs9f7c4xjv8i6EoD1qN0vUq8hMABR8hToxM" crossorigin="anonymous"></script>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const convertJpgToPng = document.getElementById('convertJpgToPng');
+        const convertJpegToPng = document.getElementById('convertJpegToPng');
+        const convertPngToJpg = document.getElementById('convertPngToJpg');
+        const convertPngToJpeg = document.getElementById('convertPngToJpeg');
+        const convertJpegToJpg = document.getElementById('convertJpegToJpg');
+        const convertJpgToJpeg = document.getElementById('convertJpgToJpeg');
+        const convertPngToWebp = document.getElementById('convertPngToWebp'); // PNG to WebP
+        const convertWebpToPng = document.getElementById('convertWebpToPng'); // WebP to PNG
+        const convertJpgToWebp = document.getElementById('convertJpgToWebp'); // JPG to WebP
+        const convertWebpToJpg = document.getElementById('convertWebpToJpg'); // WebP to JPG
+        const convertJpegToWebp = document.getElementById('convertJpegToWebp'); // JPEG to WebP
+        const convertWebpToJpeg = document.getElementById('convertWebpToJpeg'); // WebP to JPEG
+        const downloadLink = document.getElementById('downloadLink');
+        const imagePreview = document.getElementById('imagePreview');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let img = new Image();
+
+        // Handle file input change (file chooser)
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                loadImage(file);
+            }
+        });
+
+        // Handle drag and drop events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Prevent default behavior to allow drop
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                loadImage(file);
+            }
+        });
+
+        // Function to load and display the image
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // When the image is loaded, display it and prepare for conversion
+        img.onload = function() {
+            // Display the image at a fixed size (300px x 300px)
+            imagePreview.style.display = 'block';
+            imagePreview.src = img.src;
+
+            // Set canvas dimensions to the fixed size (300x300)
+            canvas.width = 300;
+            canvas.height = 300;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
+            ctx.drawImage(img, 0, 0, 300, 300); // Draw image with fixed size
+        };
+
+        // Function to show a message if no image is uploaded
+        function showAlert() {
+            alert('Please select an image before converting!');
+        }
+
+        // Convert JPG to PNG
+        convertJpgToPng.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const pngDataUrl = canvas.toDataURL('image/png');
+                downloadLink.href = pngDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.png';
+            }
+        });
+
+        // Convert JPEG to PNG
+        convertJpegToPng.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const pngDataUrl = canvas.toDataURL('image/png');
+                downloadLink.href = pngDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.png';
+            }
+        });
+
+        // Convert PNG to JPG
+        convertPngToJpg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpgDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpgDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpg';
+            }
+        });
+
+        // Convert PNG to JPEG
+        convertPngToJpeg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpegDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpegDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpeg';
+            }
+        });
+
+        // Convert JPEG to JPG
+        convertJpegToJpg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpgDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpgDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpg';
+            }
+        });
+
+        // Convert JPG to JPEG
+        convertJpgToJpeg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpegDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpegDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpeg';
+            }
+        });
+
+        // Convert PNG to WebP
+        convertPngToWebp.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const webpDataUrl = canvas.toDataURL('image/webp');
+                downloadLink.href = webpDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.webp';
+            }
+        });
+
+        // Convert WebP to PNG
+        convertWebpToPng.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const pngDataUrl = canvas.toDataURL('image/png');
+                downloadLink.href = pngDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.png';
+            }
+        });
+
+        // Convert JPG to WebP
+        convertJpgToWebp.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const webpDataUrl = canvas.toDataURL('image/webp');
+                downloadLink.href = webpDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.webp';
+            }
+        });
+
+        // Convert WebP to JPG
+        convertWebpToJpg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpgDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpgDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpg';
+            }
+        });
+
+        // Convert JPEG to WebP
+        convertJpegToWebp.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const webpDataUrl = canvas.toDataURL('image/webp');
+                downloadLink.href = webpDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.webp';
+            }
+        });
+
+        // Convert WebP to JPEG
+        convertWebpToJpeg.addEventListener('click', () => {
+            if (!img.src) {
+                showAlert();
+            } else {
+                const jpegDataUrl = canvas.toDataURL('image/jpeg');
+                downloadLink.href = jpegDataUrl;
+                downloadLink.style.display = 'block';
+                downloadLink.download = 'converted-image.jpeg';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
